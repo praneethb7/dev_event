@@ -35,30 +35,25 @@ const EventTags = ({ tags }: { tags: string[] }) => (
     </div>
 )
 
-const EventDetails = async ({ params }: { params: Promise<string> }) => {
-    'use cache'
-    cacheLife('hours');
-    const slug = await params;
+const EventDetails = async ({ slug }: { slug: string }) => {
 
     let event;
+
     try {
         const request = await fetch(`${BASE_URL}/api/events/${slug}`, {
-            next: { revalidate: 60 }
+            cache: "no-store",
         });
 
         if (!request.ok) {
-            if (request.status === 404) {
-                return notFound();
-            }
-            throw new Error(`Failed to fetch event: ${request.statusText}`);
+            if (request.status === 404) return notFound();
+            throw new Error("Failed to fetch event");
         }
 
         const response = await request.json();
         event = response.event;
 
-        if (!event) {
-            return notFound();
-        }
+        if (!event) return notFound();
+
     } catch (error) {
         console.error('Error fetching event:', error);
         return notFound();
