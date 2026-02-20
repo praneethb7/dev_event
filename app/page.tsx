@@ -1,5 +1,3 @@
-export const dynamic = "force-dynamic";
-
 import ExploreBtn from "@/components/ExploreBtn";
 import EventCard from "@/components/EventCard";
 import { IEvent } from "@/database";
